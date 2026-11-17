@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#04050c">
+<title>AI 科研知识宇宙 · AI Research Universe</title>
+<meta name="description" content="用 Anime.js 与 OpenAlex 开放数据构建的 AI 科研知识星系：945 篇高被引论文、9,111 条引用关系、2012—2025 时间演化与国际合作网络。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='7' fill='%234ED8FF'/%3E%3Cellipse cx='32' cy='32' rx='27' ry='12' fill='none' stroke='%23FF6B9D' stroke-width='2' transform='rotate(-25 32 32)'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="boot" class="boot">
+  <div class="boot-orb"><i></i><i></i><span></span></div>
+  <div class="boot-kicker">OPENALEX · OPEN KNOWLEDGE GRAPH</div>
+  <div class="boot-title">正在校准知识星系</div>
+  <div class="boot-track"><span id="bootProgress"></span></div>
+  <div class="boot-status"><span id="bootStatus">连接开放科研图谱</span><b>CC0</b></div>
+</div>
+
+<canvas id="universe" aria-label="AI 科研论文知识星系可视化"></canvas>
+<div class="space-wash"></div>
+<div class="grain"></div>
+
+<header class="topbar">
+  <a class="brand hud-in" href="#" id="brandHome" aria-label="返回知识星系">
+    <span class="brand-mark"><i class="brand-ring"></i><i class="brand-core"></i></span>
+    <span class="brand-text">
+      <b>AI RESEARCH UNIVERSE</b>
+      <em>AI 科研知识宇宙</em>
+    </span>
+  </a>
+
+  <nav class="view-nav hud-in" aria-label="视图切换">
+    <button class="nav-item is-active" data-view="galaxy" aria-pressed="true"><i>01</i><span>知识星系</span></button>
+    <button class="nav-item" data-view="countries" aria-pressed="false"><i>02</i><span>国家网络</span></button>
+    <button class="nav-item" data-view="flows" aria-pressed="false"><i>03</i><span>知识流</span></button>
+    <button class="nav-item" data-view="insights" aria-pressed="false"><i>04</i><span>研究洞察</span></button>
+  </nav>
+
+  <div class="top-actions hud-in">
+    <span class="live-chip"><i></i> OPENALEX · 2025</span>
+    <a class="source-link" href="https://openalex.org/" target="_blank" rel="noopener">数据源 <span>↗</span></a>
+  </div>
+</header>
+
+<aside class="intro" id="intro">
+  <section class="intro-page is-active" id="pageGalaxy">
+    <div class="eyebrow hud-in"><span class="eyebrow-dot"></span>A LIVING MAP OF AI RESEARCH</div>
+    <h1 class="hero-title hud-in">
+      <span class="title-row"><span>AI 科研</span></span>
+      <span class="title-row title-grad"><span>知识宇宙</span></span>
+    </h1>
+    <p class="lede hud-in">每一颗星，都是一篇论文；<br>每一束光，都是一次引用。<br>在 945 篇高被引论文的引力场里，<br>看见 AI 如何从一点微光，长成星系。<br><span class="lede-hint">滚轮下潜，点击任意一颗星。</span></p>
+
+    <div class="stat-row hud-in">
+      <div class="stat"><b data-stat="works">945</b><span>高被引论文</span></div>
+      <div class="stat"><b data-stat="citations">6.49M</b><span>累计被引</span></div>
+      <div class="stat"><b data-stat="countries">57</b><span>国家 / 地区</span></div>
+    </div>
+
+    <div class="legend-head hud-in"><span>主题星云</span><span>点击聚焦</span></div>
+    <div class="legend hud-in" id="legend"></div>
+    <div class="method hud-in">OpenAlex 开放数据 · CC0<br>2012—2025 · 每年高被引梯度抽样</div>
+  </section>
+
+  <section class="intro-page" id="pageCountries">
+    <div class="eyebrow"><span class="eyebrow-dot mint"></span>GLOBAL COLLABORATION NETWORK</div>
+    <h1 class="hero-title">
+      <span class="title-row"><span>谁在与谁</span></span>
+      <span class="title-row title-grad mint-grad"><span>共同发明？</span></span>
+    </h1>
+    <p class="lede">当论文的星尘落回地球，<br>合作变成一张跨越国界的网络。<br>节点大小代表高被引论文数，<br>连线代表同一篇论文中的跨国合作。</p>
+    <div class="stat-row">
+      <div class="stat"><b data-stat="networkNodes">26</b><span>国家节点</span></div>
+      <div class="stat"><b data-stat="networkLinks">189</b><span>合作连线</span></div>
+      <div class="stat"><b data-stat="networkCountries">57</b><span>国家 / 地区</span></div>
+    </div>
+    <div class="legend-head"><span>节点颜色 = 主导主题</span><span>点击国家</span></div>
+    <div class="legend" id="legendCountries"></div>
+    <div class="method">拖动旋转地球 · 滚轮缩放<br>连线只展示前半球，便于阅读</div>
+  </section>
+
+  <section class="intro-page" id="pageFlows">
+    <div class="eyebrow"><span class="eyebrow-dot violet"></span>CROSS-THEME KNOWLEDGE FLOW</div>
+    <h1 class="hero-title">
+      <span class="title-row"><span>知识如何</span></span>
+      <span class="title-row title-grad flow-grad"><span>穿过星云？</span></span>
+    </h1>
+    <p class="lede">当语言模型开始阅读图像，<br>当强化学习走进推理过程，<br>星云之间便长出了新的引力。<br>弧线从引用方指向被引用方。</p>
+    <div class="stat-row">
+      <div class="stat"><b data-stat="flowPairs">41</b><span>主题通道</span></div>
+      <div class="stat"><b data-stat="flowEdges">3,333</b><span>跨域引用</span></div>
+      <div class="stat"><b data-stat="flowShare">36.6%</b><span>跨星云引用</span></div>
+    </div>
+    <div class="legend-head"><span>最强知识流</span><span>点击查看</span></div>
+    <div class="flow-list" id="flowList"></div>
+    <div class="method">跨域引用 = 引用方与被引用方属于不同主题<br>弧线颜色 = 引用方主题；箭头指向被引用方</div>
+  </section>
+</aside>
+
+<div class="cluster-labels" id="clusterLabels"></div>
+
+<div class="hover-card" id="hoverCard" role="tooltip">
+  <div class="hover-kicker"><i></i><span></span></div>
+  <div class="hover-title"></div>
+  <div class="hover-meta"></div>
+</div>
+
+<aside class="detail-panel" id="detailPanel" aria-live="polite">
+  <div class="panel-head">
+    <div class="panel-type"><i></i><span>论文档案</span></div>
+    <button class="icon-btn" id="panelClose" aria-label="关闭详情">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
+    </button>
+  </div>
+  <div class="panel-scroll" id="panelBody"></div>
+  <div class="panel-foot"><span>OPENALEX</span><span>CC0 OPEN DATA</span></div>
+</aside>
+
+<section class="insights" id="insights" aria-label="研究洞察" aria-hidden="true">
+  <div class="insights-shell">
+    <header class="insights-head">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-dot"></span>RESEARCH SIGNALS</div>
+        <h2>从星图里，读出四个信号</h2>
+        <p>不是排行榜，而是高被引注意力如何在地图上迁移。</p>
+      </div>
+      <button class="icon-btn close-insights" id="insightsClose" aria-label="关闭研究洞察">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
+      </button>
+    </header>
+    <div class="insights-grid" id="insightsGrid"></div>
+    <footer class="insights-foot">
+      <span>样本：2012—2025 年 OpenAlex AI / CV / 信号处理领域每年高被引前 70 篇，去重与清洗后共 945 篇。</span>
+      <span>领域总量来自 OpenAlex group_by；主题迁移为样本内份额，不代表全领域绝对产出。</span>
+    </footer>
+  </div>
+</section>
+
+<div class="bottom-ui">
+  <div class="timeline" id="timeline">
+    <button class="play-btn" id="playBtn" aria-label="播放时间演化" aria-pressed="false">
+      <span class="play-ring"></span>
+      <svg class="icon-play" viewBox="0 0 16 18" aria-hidden="true"><path d="M2 1.5l12 7.5-12 7.5z"/></svg>
+      <svg class="icon-pause" viewBox="0 0 16 18" aria-hidden="true"><path d="M3 2h3.4v14H3zM9.6 2H13v14H9.6z"/></svg>
+    </button>
+    <div class="timeline-main">
+      <div class="timeline-top">
+        <span class="timeline-label">时间演化 <i>TIME LAPSE</i></span>
+        <div class="light-switch" role="group" aria-label="论文点亮方式">
+          <button class="light-option is-active" data-light="publish" title="论文发表后即呈现全部亮度">论文点亮</button>
+          <button class="light-option" data-light="citation" title="按逐年被引用次数累积点亮">引用点亮</button>
+        </div>
+        <span class="year-readout"><b id="yearLabel">2025</b><em id="eraLabel">推理与智能体</em></span>
+      </div>
+      <div class="range-wrap">
+        <input id="yearRange" type="range" min="2012" max="2025" step="1" value="2025" aria-label="选择年份">
+        <div class="range-ticks"><span>2012</span><span>2015</span><span>2018</span><span>2021</span><span>2025</span></div>
+      </div>
+    </div>
+    <div class="timeline-stats">
+      <div><span>本年点亮</span><b id="yearCount">54</b></div>
+      <div><span>累计论文</span><b id="cumCount">945</b></div>
+    </div>
+  </div>
+
+  <div class="globe-caption" id="globeCaption">
+    <span class="cap-dot"></span>
+    <b>拖动旋转地球</b><i></i><span>滚轮缩放</span><i></i><span>点击国家查看合作画像</span>
+  </div>
+  <div class="flow-caption" id="flowCaption">
+    <span class="cap-dot violet-dot"></span>
+    <b>悬停弧线查看流量</b><i></i><span>点击弧线看桥梁论文</span><i></i><span>拖拽旋转</span>
+  </div>
+</div>
+
+<button class="globe-lock" id="globeLock" aria-pressed="false" title="锁定地球自动旋转">
+  <i class="lock-dot"></i><span id="globeLockText">自动旋转</span>
+</button>
+
+<div class="zoom-hud" id="zoomHud">
+  <span class="zoom-value" id="zoomLabel">1.0×</span>
+  <span class="zoom-help" id="zoomHelp">SCROLL · DRAG · CLICK A STAR</span>
+</div>
+
+<div class="year-ghost" id="yearGhost" aria-hidden="true">2025</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="vendor/anime.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

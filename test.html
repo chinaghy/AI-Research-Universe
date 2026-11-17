@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>交互验收 · AI 科研知识宇宙</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='7' fill='%234ED8FF'/%3E%3Cellipse cx='32' cy='32' rx='27' ry='12' fill='none' stroke='%23FF6B9D' stroke-width='2' transform='rotate(-25 32 32)'/%3E%3C/svg%3E">
+<style>
+  @font-face{
+    font-family:"Space Grotesk";
+    src:url("vendor/fonts/SpaceGrotesk-400.ttf") format("truetype");
+    font-weight:400;font-display:swap;
+  }
+  @font-face{
+    font-family:"Space Grotesk";
+    src:url("vendor/fonts/SpaceGrotesk-500.ttf") format("truetype");
+    font-weight:500;font-display:swap;
+  }
+  :root{
+    --bg:#05070e;--panel:#0b1020;--line:rgba(161,182,245,.15);
+    --ink:#f2f5ff;--muted:#818cab;--dim:#58637e;
+    --cyan:#4ed8ff;--mint:#5ce6b3;--pink:#ff6b9d;--amber:#ffb454;--red:#ff5c72;
+  }
+  *{box-sizing:border-box}
+  html,body{min-height:100%}
+  body{
+    margin:0;background:
+      radial-gradient(60% 50% at 78% 4%,rgba(42,42,100,.30),transparent 62%),
+      radial-gradient(45% 45% at 0 100%,rgba(20,69,82,.18),transparent 68%),
+      var(--bg);
+    color:var(--ink);font-family:"Space Grotesk","PingFang SC","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  button,a.cta{font-family:inherit}
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:20px 28px;border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand-mark{
+    width:25px;height:25px;border-radius:50%;border:1px solid rgba(78,216,255,.55);
+    position:relative;box-shadow:0 0 24px rgba(78,216,255,.12);
+  }
+  .brand-mark:after{
+    content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;
+    left:9px;top:9px;box-shadow:0 0 12px var(--cyan);
+  }
+  .brand b{display:block;font-size:10px;letter-spacing:.18em;font-weight:500}
+  .brand em{display:block;font-size:9px;font-style:normal;color:var(--dim);letter-spacing:.12em;margin-top:4px}
+  .actions{display:flex;align-items:center;gap:9px}
+  .btn{
+    border:1px solid var(--line);background:rgba(255,255,255,.035);color:#cbd6ef;
+    padding:9px 13px;border-radius:7px;font-size:10px;letter-spacing:.03em;cursor:pointer;
+    transition:.2s;
+  }
+  .btn:hover{background:rgba(255,255,255,.075);border-color:rgba(188,207,255,.32);color:#fff}
+  .btn.primary{background:rgba(78,216,255,.10);border-color:rgba(78,216,255,.30);color:#e7fbff}
+  .btn.primary:hover{background:rgba(78,216,255,.18)}
+  main{
+    display:grid;grid-template-columns:minmax(0,1fr) 375px;
+    gap:18px;padding:18px 28px 24px;max-width:1700px;margin:0 auto;
+  }
+  .stage{
+    min-width:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:linear-gradient(160deg,rgba(17,23,44,.70),rgba(6,9,19,.75));
+    box-shadow:0 24px 80px rgba(0,0,0,.22);
+  }
+  .stage-head{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:11px 14px;border-bottom:1px solid rgba(161,182,245,.09);
+    font-size:8px;letter-spacing:.14em;color:#707c9b;text-transform:uppercase;
+  }
+  .stage-head b{font-weight:400;color:#b5c2dc}
+  .stage-head span{font-family:ui-monospace,SFMono-Regular,monospace;font-size:7px;color:#4f5b76}
+  .preview{
+    position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;
+    background:#04050c;
+  }
+  .preview iframe{
+    position:absolute;left:0;top:0;width:1440px;height:900px;border:0;
+    transform-origin:0 0;background:#04050c;
+  }
+  .stage-foot{
+    display:flex;justify-content:space-between;gap:14px;
+    padding:11px 14px;border-top:1px solid rgba(161,182,245,.08);
+    font-size:7.5px;line-height:1.65;color:#59647f;
+  }
+  .stage-foot span:last-child{text-align:right}
+  .panel{
+    min-width:0;display:flex;flex-direction:column;gap:14px;
+  }
+  .summary{
+    border:1px solid var(--line);border-radius:14px;padding:16px 17px;
+    background:linear-gradient(150deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+  }
+  .summary-top{display:flex;align-items:flex-end;gap:10px}
+  .summary b{font-family:ui-monospace,SFMono-Regular,monospace;font-size:38px;line-height:.9;font-weight:400;letter-spacing:-.06em}
+  .summary span{font-size:8px;color:#6f7b99;letter-spacing:.08em;margin-bottom:3px}
+  .summary p{margin:9px 0 0;font-size:9.5px;line-height:1.65;color:#76829f}
+  .meter{height:3px;margin-top:13px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden}
+  .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--mint));transition:width .35s}
+  .tests{
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:rgba(5,8,18,.44);
+  }
+  .tests-head{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid rgba(161,182,245,.09);font-size:8px;letter-spacing:.13em;color:#64708c}
+  #testList{max-height:calc(100vh - 360px);overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(137,157,215,.23) transparent}
+  .test{
+    display:grid;grid-template-columns:14px 1fr auto;gap:9px;align-items:flex-start;
+    padding:10px 14px;border-bottom:1px solid rgba(161,182,245,.055);
+  }
+  .test:last-child{border-bottom:0}
+  .dot{width:5px;height:5px;border-radius:50%;margin-top:5px;background:#4d5873;transition:.2s}
+  .test.running .dot{background:var(--amber);box-shadow:0 0 9px var(--amber);animation:blink 1s infinite}
+  .test.pass .dot{background:var(--mint);box-shadow:0 0 9px var(--mint)}
+  .test.fail .dot{background:var(--red);box-shadow:0 0 9px var(--red)}
+  .test .t-title{font-size:9.5px;line-height:1.5;color:#c6d0e6}
+  .test .t-desc{font-size:7.5px;line-height:1.5;color:#59647f;margin-top:2px}
+  .test .t-state{font-family:ui-monospace,SFMono-Regular,monospace;font-size:7px;color:#59647f;white-space:nowrap;padding-top:2px}
+  .test.pass .t-state{color:var(--mint)}
+  .test.fail .t-state{color:var(--red)}
+  @keyframes blink{0%,100%{opacity:.35}50%{opacity:1}}
+  .logbox{
+    border:1px solid var(--line);border-radius:14px;background:rgba(3,5,12,.64);
+    overflow:hidden;
+  }
+  .logbox header{padding:9px 14px;font-size:7px;letter-spacing:.13em;color:#59647f;border-bottom:1px solid rgba(161,182,245,.07)}
+  #log{
+    margin:0;padding:10px 14px;max-height:170px;min-height:62px;overflow:auto;
+    font-family:ui-monospace,SFMono-Regular,monospace;font-size:8px;line-height:1.9;color:#6f7b99;
+    white-space:pre-wrap;
+  }
+  .notice{
+    display:none;margin:0 0 14px;padding:12px 14px;border-radius:10px;
+    border:1px solid rgba(255,180,84,.25);background:rgba(255,180,84,.08);
+    color:#ffd39b;font-size:9.5px;line-height:1.7;
+  }
+  .notice.show{display:block}
+  .notice a{color:#ffe4bf;text-decoration:underline}
+  @media(max-width:1120px){
+    main{grid-template-columns:1fr}
+    #testList{max-height:360px}
+    .summary{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+    .summary p{margin:0}
+    .meter{grid-column:1/-1;margin-top:0}
+  }
+  @media(max-width:620px){
+    .topbar{padding:15px 16px;align-items:flex-start}
+    .brand em{display:none}
+    .actions{gap:6px}
+    .btn{padding:8px 9px;font-size:8.5px}
+    main{padding:12px}
+    .preview{aspect-ratio:4/3}
+    .stage-foot{display:none}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <i class="brand-mark"></i>
+    <div><b>INTERACTION QA</b><em>AI 科研知识宇宙 · 交互验收台</em></div>
+  </div>
+  <div class="actions">
+    <button class="btn" id="openApp">打开主页面 ↗</button>
+    <button class="btn primary" id="runBtn">重新检测</button>
+  </div>
+</header>
+
+<main>
+  <section class="stage">
+    <div class="stage-head"><b>实时预览 · 真实交互页面</b><span>IFRAME · 1440 × 900</span></div>
+    <div class="preview" id="preview">
+      <iframe id="appFrame" src="index.html" title="AI 科研知识宇宙交互预览"></iframe>
+    </div>
+    <div class="stage-foot">
+      <span>建议通过本地服务器运行，避免浏览器对 file:// iframe 的同源限制。</span>
+      <span>自动化步骤直接调用页面公开 API，并验证 DOM 与状态是否同步。</span>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <div class="notice" id="notice"></div>
+    <div class="summary">
+      <div class="summary-top"><b id="score">--</b><span>PASSED / <i id="total">0</i></span></div>
+      <p id="summaryText">等待连接可视化页面…</p>
+      <div class="meter"><i id="meter"></i></div>
+    </div>
+
+    <section class="tests">
+      <div class="tests-head"><span>验收用例</span><span id="runState">IDLE</span></div>
+      <div id="testList"></div>
+    </section>
+
+    <section class="logbox">
+      <header>运行日志 / RUNTIME LOG</header>
+      <pre id="log">等待启动…</pre>
+    </section>
+  </aside>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  const frame = document.getElementById('appFrame');
+  const runBtn = document.getElementById('runBtn');
+  const openApp = document.getElementById('openApp');
+  const list = document.getElementById('testList');
+  const scoreEl = document.getElementById('score');
+  const totalEl = document.getElementById('total');
+  const summaryText = document.getElementById('summaryText');
+  const meter = document.getElementById('meter');
+  const runState = document.getElementById('runState');
+  const logEl = document.getElementById('log');
+  const notice = document.getElementById('notice');
+  const preview = document.getElementById('preview');
+
+  const logLines = [];
+  const pageErrors = [];
+  let runToken = 0;
+
+  const tests = [
+    {
+      id: 'data', title: '数据快照完整',
+      desc: '945 篇论文、7 个主题、9,111 条引用、57 个国家/地区',
+      run: async (w, d) => {
+        const D = w.AI_DATA;
+        eq(D.meta.works, 945, '论文数');
+        eq(Object.keys(D.themes).length, 7, '主题数');
+        eq(D.allEdges.length, 9111, '引用边数');
+        eq(new Set(D.works.flatMap(x => x.countries || [])).size, 57, '国家/地区数');
+      }
+    },
+    {
+      id: 'title', title: '标题两行完整可见',
+      desc: '验证第二行没有因 background-clip 或行框裁切而消失',
+      run: async (w, d) => {
+        const rows = [...d.querySelectorAll('#pageGalaxy .title-row')];
+        eq(rows.length, 2, '标题行数');
+        rows.forEach((row, i) => {
+          const span = row.querySelector('span');
+          const box = row.getBoundingClientRect();
+          const style = w.getComputedStyle(span);
+          trueish(box.height > 20, `第 ${i + 1} 行高度`);
+          trueish(style.color !== 'rgba(0, 0, 0, 0)', `第 ${i + 1} 行文字颜色不透明`);
+          eq(style.opacity, '1', `第 ${i + 1} 行可见`);
+        });
+        trueish(d.querySelector('#pageGalaxy .title-grad').textContent.includes('知识宇宙'), '第二行文字内容');
+      }
+    },
+    {
+      id: 'light', title: '论文点亮 / 引用点亮',
+      desc: '切换时间语义，并校验时间轴与状态同步',
+      run: async (w, d) => {
+        d.querySelector('.light-option[data-light="citation"]').click();
+        await wait(220);
+        eq(w.__GALAXY__.state.lightMode, 'citation', '引用点亮状态');
+        trueish(d.querySelector('.light-option[data-light="citation"]').classList.contains('is-active'), '引用点亮按钮高亮');
+        w.__GALAXY__.setYear(2017, false);
+        await wait(450);
+        eq(w.__GALAXY__.state.year, 2017, '时间轴年份');
+        trueish(d.querySelector('#yearLabel').textContent === '2017', '年份 DOM 同步');
+        d.querySelector('.light-option[data-light="publish"]').click();
+        await wait(200);
+        eq(w.__GALAXY__.state.lightMode, 'publish', '论文点亮状态');
+        w.__GALAXY__.setYear(2025, false);
+        await wait(250);
+      }
+    },
+    {
+      id: 'flow', title: '跨星云知识流',
+      desc: '41 条主题通道、有向弧线与桥梁论文面板',
+      run: async (w, d) => {
+        w.__GALAXY__.setView('flows');
+        await wait(1250);
+        eq(w.__GALAXY__.state.view, 'flows', '知识流视图');
+        eq(d.querySelectorAll('.flow-list-item').length, 5, '最强知识流列表');
+        trueish(d.body.classList.contains('flow-mode'), 'flow-mode 状态');
+        const pair = ['language', 'vision'];
+        w.__GALAXY__.selectFlowEdge(pair[0], pair[1]);
+        await wait(750);
+        trueish(d.querySelector('#detailPanel').classList.contains('is-open'), '知识流详情打开');
+        trueish((d.querySelector('.flow-route')?.textContent || '').includes('语言与推理'), '通道标题');
+        d.querySelector('#panelClose').click();
+        await wait(350);
+      }
+    },
+    {
+      id: 'country', title: '国家网络与 RCA 指纹',
+      desc: '进入地球视图、选择英国、渲染七轴研究指纹',
+      run: async (w, d) => {
+        w.__GALAXY__.setView('countries');
+        await wait(1050);
+        eq(w.__GALAXY__.state.view, 'countries', '国家网络视图');
+        w.__GALAXY__.selectCountry('GB');
+        await wait(900);
+        eq(w.__GALAXY__.state.selectedCountry, 'GB', '选中英国');
+        trueish(d.querySelectorAll('.fingerprint-wrap svg').length === 1, 'RCA 雷达图');
+        trueish((d.querySelector('.fingerprint-wrap')?.textContent || '').includes('智能体'), '专业化标签');
+        d.querySelector('#panelClose').click();
+        await wait(450);
+      }
+    },
+    {
+      id: 'lock', title: '极轴自动旋转与锁定',
+      desc: '默认自转，点击「锁定自转」后 yaw 停止变化',
+      run: async (w, d) => {
+        const g = w.__GALAXY__.globe;
+        g.locked = false;
+        if (d.querySelector('#globeLock').classList.contains('is-locked')) d.querySelector('#globeLock').click();
+        await wait(250);
+        const before = g.yaw;
+        await wait(650);
+        trueish(Math.abs(g.yaw - before) > 0.005, '默认自动旋转');
+        d.querySelector('#globeLock').click();
+        await wait(250);
+        eq(g.locked, true, '锁定状态');
+        trueish(d.querySelector('#globeLockText').textContent === '已锁定', '锁定文案');
+        const lockedYaw = g.yaw;
+        await wait(650);
+        trueish(Math.abs(g.yaw - lockedYaw) < 0.0001, '锁定后停止旋转');
+        d.querySelector('#globeLock').click();
+        await wait(220);
+        eq(g.locked, false, '解除锁定');
+      }
+    },
+    {
+      id: 'insights', title: '研究洞察面板',
+      desc: '领域产出、主题迁移、国家矩阵、跨界桥梁四张卡片',
+      run: async (w, d) => {
+        w.__GALAXY__.openInsights();
+        await wait(750);
+        eq(w.__GALAXY__.state.insightOpen, true, '洞察开启');
+        eq(d.querySelectorAll('.insight-card').length, 4, '洞察卡片数');
+        trueish(!!d.querySelector('.chart-line'), '领域产出曲线');
+        trueish(!!d.querySelector('.heatmap'), '国家 × 主题矩阵');
+        w.__GALAXY__.closeInsights();
+        await wait(350);
+      }
+    },
+    {
+      id: 'reset', title: '四视图导航与返回',
+      desc: '返回知识星系，时间轴与主动态恢复',
+      run: async (w, d) => {
+        w.__GALAXY__.setView('galaxy', { force: true });
+        await wait(800);
+        eq(w.__GALAXY__.state.view, 'galaxy', '返回星系');
+        trueish(!d.body.classList.contains('globe-mode') && !d.body.classList.contains('flow-mode'), '清理视图状态');
+        trueish(d.querySelector('.nav-item[data-view="galaxy"]').classList.contains('is-active'), '导航高亮');
+        trueish(w.getComputedStyle(d.querySelector('#timeline')).opacity !== '0', '时间轴恢复');
+      }
+    }
+  ];
+
+  function eq(actual, expected, label) {
+    if (actual !== expected) throw new Error(`${label}: 期望 ${JSON.stringify(expected)}，实际 ${JSON.stringify(actual)}`);
+  }
+  function trueish(value, label) {
+    if (!value) throw new Error(`${label}: 断言失败`);
+  }
+  function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+  function log(line) {
+    logLines.unshift(`[${new Date().toLocaleTimeString('zh-CN', { hour12: false })}] ${line}`);
+    logLines.splice(30);
+    logEl.textContent = logLines.join('\n');
+  }
+  function renderTests() {
+    list.innerHTML = tests.map(t => `
+      <div class="test" data-test="${t.id}">
+        <i class="dot"></i>
+        <div><div class="t-title">${t.title}</div><div class="t-desc">${t.desc}</div></div>
+        <span class="t-state">WAIT</span>
+      </div>`).join('');
+    totalEl.textContent = tests.length;
+  }
+  function setTestState(id, state, detail = '') {
+    const el = list.querySelector(`[data-test="${id}"]`);
+    if (!el) return;
+    el.classList.remove('pass', 'fail', 'running');
+    if (state) el.classList.add(state);
+    el.querySelector('.t-state').textContent = state === 'pass' ? 'PASS' : state === 'fail' ? 'FAIL' : state === 'running' ? 'RUN' : 'WAIT';
+    if (detail) el.querySelector('.t-desc').textContent = detail;
+  }
+  function fitPreview() {
+    const scale = preview.clientWidth / 1440;
+    frame.style.transform = `scale(${scale})`;
+    frame.style.height = (900 * scale) + 'px';
+    frame.style.width = '1440px';
+    preview.style.height = (900 * scale) + 'px';
+  }
+  function attachErrorHooks(w) {
+    pageErrors.length = 0;
+    w.addEventListener('error', e => pageErrors.push(e.message || 'window.error'));
+    w.addEventListener('unhandledrejection', e => pageErrors.push(String(e.reason || 'unhandledrejection')));
+    const original = w.console.error;
+    w.console.error = (...args) => {
+      pageErrors.push(args.map(String).join(' '));
+      original.apply(w.console, args);
+    };
+  }
+
+  async function runAll() {
+    const token = ++runToken;
+    renderTests();
+    scoreEl.textContent = '--';
+    meter.style.width = '0%';
+    runState.textContent = 'RUNNING';
+    summaryText.textContent = '正在连接 iframe 中的可视化页面…';
+    logLines.length = 0;
+    logEl.textContent = '';
+    pageErrors.length = 0;
+    notice.classList.remove('show');
+    runBtn.disabled = true;
+
+    let passed = 0;
+    let failed = 0;
+
+    try {
+      if (!frame.contentWindow) throw new Error('iframe 尚未加载');
+      const w = frame.contentWindow;
+      const d = frame.contentDocument;
+      attachErrorHooks(w);
+      log('连接 iframe 成功，等待可视化初始化');
+      await waitFor(() => w.__GALAXY__ && w.__GALAXY__.state.booted, 12000, 100);
+      log('可视化已启动');
+      await waitFor(() => !w.__GALAXY__.state.introActive, 9000, 100);
+      log('开场动画完成');
+      await wait(300);
+    } catch (err) {
+      notice.innerHTML = `无法访问 iframe 内容。请通过本地服务器打开本页：<br><code>python3 -m http.server 8000</code>，然后访问 <a href="http://localhost:8000/test.html" target="_blank">http://localhost:8000/test.html</a>。<br>错误：${String(err.message || err)}`;
+      notice.classList.add('show');
+      runState.textContent = 'BLOCKED';
+      summaryText.textContent = 'iframe 同源访问失败，测试未启动。';
+      runBtn.disabled = false;
+      return;
+    }
+
+    for (const test of tests) {
+      if (token !== runToken) return;
+      setTestState(test.id, 'running');
+      const started = performance.now();
+      try {
+        await test.run(frame.contentWindow, frame.contentDocument);
+        if (pageErrors.length) {
+          throw new Error(`页面运行错误：${pageErrors[pageErrors.length - 1]}`);
+        }
+        passed++;
+        setTestState(test.id, 'pass');
+        log(`PASS · ${test.title} · ${Math.round(performance.now() - started)}ms`);
+      } catch (err) {
+        failed++;
+        setTestState(test.id, 'fail', String(err.message || err));
+        log(`FAIL · ${test.title} · ${err.message || err}`);
+      }
+      const pct = Math.round((passed + failed) / tests.length * 100);
+      meter.style.width = pct + '%';
+      scoreEl.textContent = String(passed).padStart(2, '0');
+    }
+
+    scoreEl.textContent = String(passed).padStart(2, '0');
+    totalEl.textContent = tests.length;
+    summaryText.textContent = failed === 0
+      ? `全部 ${passed} 项通过。页面结构、时间轴、知识流、国家网络、洞察与自转锁定均正常。`
+      : `${passed} 项通过，${failed} 项失败。请根据右侧日志检查。`;
+    runState.textContent = failed === 0 ? 'PASS' : 'FAIL';
+    meter.style.width = '100%';
+    log('检测完成');
+    runBtn.disabled = false;
+  }
+
+  async function waitFor(fn, timeout = 5000, interval = 100) {
+    const start = performance.now();
+    while (performance.now() - start < timeout) {
+      let ok = false;
+      try { ok = !!fn(); } catch (_) {}
+      if (ok) return true;
+      await wait(interval);
+    }
+    throw new Error('等待超时');
+  }
+
+  runBtn.addEventListener('click', runAll);
+  openApp.addEventListener('click', () => window.open('index.html', '_blank', 'noopener'));
+  window.addEventListener('resize', fitPreview);
+  frame.addEventListener('load', () => {
+    fitPreview();
+    log('iframe load');
+    setTimeout(runAll, 200);
+  });
+  fitPreview();
+  renderTests();
+})();
+</script>
+</body>
+</html>
