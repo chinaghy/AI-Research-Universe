@@ -1,5 +1,7 @@
 # AI 科研知识宇宙 · AI Research Universe
 
+https://chinaghy.github.io/AI-Research-Universe/
+
 一个用 **Anime.js v4 + Canvas 2D + OpenAlex 开放数据** 制作的交互式科研知识星系。
 
 把 2012—2025 年 AI / 计算机视觉 / 信号处理领域的高被引论文，组织成 7 个主题星云、9,111 条真实引用关系、一张可旋转的国际合作网络和一张跨主题知识流图。每一颗星是一篇论文，每一次缩放都是一次从领域全景到论文摘要的下潜。
